@@ -1,5 +1,5 @@
 {
-  "name": "elasticquent/elasticquent",
+  "name": "linkthrow/elasticquent",
   "type": "library",
   "description": "Maps Laravel Eloquent models to Elasticsearch types.",
   "keywords": [
@@ -7,7 +7,7 @@
     "eloquent",
     "laravel"
   ],
-  "homepage": "https://github.com/elasticquent/Elasticquent",
+  "homepage": "https://github.com/linkthrow/Elasticquent",
   "license": "MIT",
   "authors": [
     {
