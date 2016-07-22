@@ -49,15 +49,14 @@ Elasticquent allows you take an Eloquent model and easily index and search its c
 When you search, instead of getting a plain array of search results, you instead get an Eloquent collection with some special Elasticsearch functionality.
 
 ```php
-    $books = Book::search('Moby Dick')->get();
+    $books = Book::search('Moby Dick');
     echo $books->totalHits();
 ```
 
 Plus, you can still use all the Eloquent collection functionality:
 
 ```php
-    $books = $books->filter(function($book)
-    {
+    $books = $books->filter(function ($book) {
         return $book->hasISBN();
     });
 ```
@@ -99,10 +98,9 @@ Then add the Elasticquent trait to any Eloquent model that you want to be able t
 ```php
 use Elasticquent\ElasticquentTrait;
 
-class Book extends Eloquent {
-
+class Book extends Eloquent
+{
     use ElasticquentTrait;
-
 }
 ```
 
@@ -244,6 +242,39 @@ You can also get the type mapping and check if it exists.
     Book::mappingExists();
     Book::getMapping();
 ```
+
+### Setting a Custom Index Name
+
+By default, Elasticquent will look for the `default_index` key within your configuration file(`config/elasticquent.php`). To set the default value for an index being used, you can edit this file and set the `default_index` key:
+
+```php
+return array(
+
+   // Other configuration keys ...
+   
+   /*
+    |--------------------------------------------------------------------------
+    | Default Index Name
+    |--------------------------------------------------------------------------
+    |
+    | This is the index name that Elastiquent will use for all
+    | Elastiquent models.
+    */
+    
+   'default_index' => 'my_custom_index_name',
+);
+```
+
+If you'd like to have a more dynamic index, you can also override the default configuration with a `getIndexName` method inside your Eloquent model:
+
+```php
+function getIndexName()
+{
+    return 'custom_index_name';
+}
+```
+
+Note: If no index was specified, Elasticquent will use a hardcoded string with the value of `default`.
 
 ### Setting a Custom Type Name
 
@@ -455,8 +486,8 @@ Be careful with this, as Elasticquent reads the document source into the Eloquen
 If you are using a custom collection with your Eloquent models, you just need to add the `ElasticquentCollectionTrait` to your collection so you can use `addToIndex`.
 
 ```php
-class MyCollection extends \Illuminate\Database\Eloquent\Collection {
-
+class MyCollection extends \Illuminate\Database\Eloquent\Collection
+{
     use ElasticquentCollectionTrait;
 }
 ```

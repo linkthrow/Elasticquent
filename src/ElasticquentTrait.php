@@ -65,25 +65,6 @@ trait ElasticquentTrait
     }
 
     /**
-     * Get Index Name
-     *
-     * @return string
-     */
-    public function getIndexName()
-    {
-        // The first thing we check is if there is an elasticquent
-        // config file and if there is a default index.
-        $index_name = $this->getElasticConfig('default_index');
-
-        if (!empty($index_name)) {
-            return $index_name;
-        }
-
-        // Otherwise we will just go with 'default'
-        return 'default';
-    }
-
-    /**
      * Get Type Name
      *
      * @return string
@@ -707,6 +688,9 @@ trait ElasticquentTrait
         $instance = $model;
 
         $items = array_map(function ($item) use ($instance, $parentRelation) {
+            // Convert all null relations into empty arrays
+            $item = $item ?: [];
+            
             return static::newFromBuilderRecursive($instance, $item, $parentRelation);
         }, $items);
 
@@ -731,7 +715,7 @@ trait ElasticquentTrait
 
                     if ($relation instanceof Relation) {
                         // Check if the relation field is single model or collections
-                        if (!static::isMultiLevelArray($value)) {
+                        if (is_null($value) === true || !static::isMultiLevelArray($value)) {
                             $value = [$value];
                         }
 
